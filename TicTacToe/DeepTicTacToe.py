@@ -12,13 +12,17 @@ import matplotlib.pyplot as plt
 
 class TicTacToe():
 
-    def __init__(self, player1, player2, exp1=1, exp2=1):
+    def __init__(self, player1, player2, exp1=1, exp2=1,token='X'):
         self.state = '123456789'
 
         player1 = globals()[player1]
-        self.player1 = player1(tag='X', exploration_factor=exp1)
         player2 = globals()[player2]
-        self.player2 = player2(tag='O', exploration_factor=exp2)
+        if token == 'X':
+            self.player1 = player1(tag='X', exploration_factor=exp1)
+            self.player2 = player2(tag='O', exploration_factor=exp2)
+        if token == 'O':
+            self.player1 = player1(tag='O', exploration_factor=exp1)
+            self.player2 = player2(tag='X', exploration_factor=exp2)
 
         self.winner = None
 

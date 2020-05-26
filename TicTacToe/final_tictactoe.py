@@ -3,7 +3,7 @@ from keras.models import load_model
 from keras.preprocessing import image
 import numpy as np
 import joblib
-from DeepTicTacToe_org import TicTacToe
+from DeepTicTacToe import TicTacToe
 from helper_functions import *
 
 BOARD_PREDICTION_RELIABILITY = 1.80
@@ -33,14 +33,14 @@ while True:
 if player == "O":
     agent_token = "X"
     if agent_type == "1":
-        agent = TicTacToe('DeepAgent', "Player", 1, 1)
+        agent = TicTacToe('DeepAgent', "Player", 1, 1,token='O')
     else:
         q_table = joblib.load("q_table_player1.sav")
         states = joblib.load("states_player1.sav")
 else:
     agent_token = "O"
     if agent_type == "1":
-        agent = TicTacToe('Player', 'DeepAgent', 1, 1)
+        agent = TicTacToe('Player', 'DeepAgent', 1, 1,token='X')
     else:
         q_table = joblib.load("q_table_player2.sav")
         states = joblib.load("states_player2.sav")
