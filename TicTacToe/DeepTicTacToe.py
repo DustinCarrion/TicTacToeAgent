@@ -35,11 +35,6 @@ class TicTacToe():
 
 
     def play_game(self, optionState=None):
-
-        if isinstance(self.player1, QAgent):
-            self.player1.exp_factor = 1
-        if isinstance(self.player2, QAgent):
-            self.player2.exp_factor = 1
             
         if optionState and self.turn=='X':
             new_state = self.player2.make_move(optionState, self.winner)
@@ -156,21 +151,14 @@ class TicTacToe():
 
         if self.winner == 'X':
             self.Xcount += 1
-            # print('The winner is X')
-            # print('')
-            # self.print_game()
+
 
         elif self.winner == 'O':
             self.Ocount += 1
-            # print('The winner is O')
-            # print('')
-            # self.print_game()
 
         elif self.winner == 'No winner':
             self.Tcount += 1
-            # print('No winner')
-            # print('')
-            # self.print_game()
+
 
     def init_game(self):
         self.state = '123456789'
@@ -340,60 +328,6 @@ class Agent(Player):
         else:
             R = -1
         return R
-
-
-class QAgent(Agent):
-
-    def __init__(self, tag, exploration_factor=1):
-        super().__init__(tag, exploration_factor)
-        self.tag = tag
-        self.values = dict()
-        self.load_values()
-
-    def learn_state(self, state, winner):
-
-        if self.tag in state:
-            if self.prev_state in self.values.keys():
-                v_s = self.values[self.prev_state]
-            else:
-                v_s = int(0)
-
-            R = self.reward(winner)
-
-            if self.state in self.values.keys() and winner is None:
-                v_s_tag = self.values[state]
-            else:
-                v_s_tag = int(0)
-
-            self.values[self.prev_state] = v_s + self.alpha*(R + v_s_tag - v_s)
-
-        self.prev_state = state
-
-    def calc_value(self, state):
-        if state in self.values.keys():
-            return self.values[state]
-
-    def load_values(self):
-        s = 'values' + self.tag + '.csv'
-        try:
-            value_csv = csv.reader(open(s, 'r'))
-            for row in value_csv:
-                k, v = row
-                self.values[k] = float(v)
-        except:
-            pass
-        # print(self.values)
-
-    def save_values(self):
-        s = 'values' + self.tag + '.csv'
-        try:
-            os.remove(s)
-        except:
-            pass
-        a = csv.writer(open(s, 'a'))
-
-        for v, k in self.values.items():
-            a.writerow([v, k])
 
 class DeepAgent(Agent):
 

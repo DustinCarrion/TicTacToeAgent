@@ -34,13 +34,7 @@ class TicTacToe():
         self.all_count = 0
         print(player1)
 
-    def play_game(self, optionState=None):
-
-        if isinstance(self.player1, QAgent):
-            self.player1.exp_factor = 1
-        if isinstance(self.player2, QAgent):
-            self.player2.exp_factor = 1
-            
+    def play_game(self, optionState=None):            
         if optionState and self.turn=='X':
             new_state = self.player2.make_move(optionState, self.winner)
             return new_state 
