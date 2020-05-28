@@ -64,5 +64,3 @@ model.compile(optimizer = 'adam', loss = 'categorical_crossentropy', metrics = [
 model.fit(X_train, y_train, validation_data=(X_test, y_test), epochs=50)
 
 model.save('cnn.h5') 
-
-# model.add(Dropout(0.3))

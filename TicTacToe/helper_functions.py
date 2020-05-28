@@ -50,7 +50,26 @@ def isEmpty(board):
             if board[i][j] != " ":
                 return False
     return True
-    
+
+
+def valid(board, player):
+    x = 0
+    o = 0
+    for i in range(3):
+        for j in range(3):
+            if board[i][j] == "X":
+                x+=1
+            elif board[i][j] == "O":
+                o+=1
+    if x == o and x == 0:
+        return True
+    if player == "O":
+        if x == o:
+            return True
+    else:
+        if x == (o+1):
+            return True
+    return False
 
 def getPossibleActions(board):
     possible_actions = []

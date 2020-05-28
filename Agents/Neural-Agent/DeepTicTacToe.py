@@ -32,7 +32,7 @@ class TicTacToe():
         self.Ocount = 0
         self.Tcount = 0
         self.all_count = 0
-
+        print(player1)
 
     def play_game(self, optionState=None):
 
@@ -44,9 +44,7 @@ class TicTacToe():
         if optionState and self.turn=='X':
             new_state = self.player2.make_move(optionState, self.winner)
             return new_state 
-                # print("---------\n" + new_state + "\n---------\n")
-
-
+               
         while self.winner is None:
 
             if type(self.player_turn) == Player:
@@ -64,7 +62,6 @@ class TicTacToe():
     def play_to_learn(self, episodes):
 
         for i in range(episodes):
-            # print('Episode number: ' + str(i))
 
             while self.winner is None:
                 self.state = self.play_move(learn=True)
@@ -156,21 +153,12 @@ class TicTacToe():
 
         if self.winner == 'X':
             self.Xcount += 1
-            # print('The winner is X')
-            # print('')
-            # self.print_game()
 
         elif self.winner == 'O':
             self.Ocount += 1
-            # print('The winner is O')
-            # print('')
-            # self.print_game()
 
         elif self.winner == 'No winner':
             self.Tcount += 1
-            # print('No winner')
-            # print('')
-            # self.print_game()
 
     def init_game(self):
         self.state = '123456789'
@@ -342,59 +330,6 @@ class Agent(Player):
         return R
 
 
-class QAgent(Agent):
-
-    def __init__(self, tag, exploration_factor=1):
-        super().__init__(tag, exploration_factor)
-        self.tag = tag
-        self.values = dict()
-        self.load_values()
-
-    def learn_state(self, state, winner):
-
-        if self.tag in state:
-            if self.prev_state in self.values.keys():
-                v_s = self.values[self.prev_state]
-            else:
-                v_s = int(0)
-
-            R = self.reward(winner)
-
-            if self.state in self.values.keys() and winner is None:
-                v_s_tag = self.values[state]
-            else:
-                v_s_tag = int(0)
-
-            self.values[self.prev_state] = v_s + self.alpha*(R + v_s_tag - v_s)
-
-        self.prev_state = state
-
-    def calc_value(self, state):
-        if state in self.values.keys():
-            return self.values[state]
-
-    def load_values(self):
-        s = 'values' + self.tag + '.csv'
-        try:
-            value_csv = csv.reader(open(s, 'r'))
-            for row in value_csv:
-                k, v = row
-                self.values[k] = float(v)
-        except:
-            pass
-        # print(self.values)
-
-    def save_values(self):
-        s = 'values' + self.tag + '.csv'
-        try:
-            os.remove(s)
-        except:
-            pass
-        a = csv.writer(open(s, 'a'))
-
-        for v, k in self.values.items():
-            a.writerow([v, k])
-
 class DeepAgent(Agent):
 
     def __init__(self, tag, exploration_factor=1):
@@ -429,13 +364,16 @@ class DeepAgent(Agent):
         model_file = Path(s)
         if model_file.is_file():
             model = Km.load_model(s)
+            print('load model: ' + s)
         else:
+            print('new model')
             model = Km.Sequential()
             model.add(Kl.Dense(18, activation='relu', input_dim=9))
             model.add(Kl.Dense(18, activation='relu'))
             model.add(Kl.Dense(1, activation='linear'))
             model.compile(optimizer='adam', loss='mean_absolute_error', metrics=['accuracy'])
 
+        model.summary()
         return model
 
     def calc_value(self, state):
@@ -473,3 +411,10 @@ class DeepAgent(Agent):
             pass
         self.value_model.save(s)
 
+def train():
+    game = TicTacToe('DeepAgent', 'DeepAgent', 0.8, 0.8)
+    game.play_to_learn(30000)
+
+
+
+train()

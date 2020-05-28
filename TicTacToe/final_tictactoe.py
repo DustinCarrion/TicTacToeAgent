@@ -33,14 +33,14 @@ while True:
 if player == "O":
     agent_token = "X"
     if agent_type == "1":
-        agent = TicTacToe('DeepAgent', "Player", 1, 1,token='O')
+        agent = TicTacToe("Player", 'DeepAgent', 1, 1, "O")
     else:
         q_table = joblib.load("q_table_player1.sav")
         states = joblib.load("states_player1.sav")
 else:
     agent_token = "O"
     if agent_type == "1":
-        agent = TicTacToe('Player', 'DeepAgent', 1, 1,token='X')
+        agent = TicTacToe('Player', 'DeepAgent', 1, 1, "X")
     else:
         q_table = joblib.load("q_table_player2.sav")
         states = joblib.load("states_player2.sav")
@@ -121,12 +121,7 @@ while not(win) and not(tie):
                                         row.append(TOKENS[cnn_token_prediction])
                                     digital_board.append(row)
                                 
-                                #------------------BOARD VERIFICATIONS------------------
-                                if isEmpty(digital_board) and player == "X":
-                                    find = True
-                                    print("The board is empty. Player X must starts.")
-                                    break
-                                
+                                #------------------GAME VERIFICATIONS------------------
                                 win = checkWin(digital_board, player)
                                 if win:
                                     find = True
@@ -148,6 +143,14 @@ while not(win) and not(tie):
                                     elif d%256 == 49: #1
                                         find = True
                                         cv2.destroyWindow("Digitized Board")
+                                        #------------------BOARD VERIFICATIONS------------------
+                                        if isEmpty(digital_board) and player == "X":
+                                            print("The board is empty. Player X must starts.")
+                                            break
+                                        
+                                        if not valid(digital_board, player):
+                                            print("The board is invalid. Try again.")
+                                            break
                                         
                                         #------------------AGENT PLAY------------------
                                         if agent_type == "1":
